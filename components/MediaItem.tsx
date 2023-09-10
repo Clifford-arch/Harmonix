@@ -1,6 +1,7 @@
 "use client";
 
 import useLoadImage from "@/hooks/useLoadImage";
+import usePlayer from "@/hooks/usePlayer";
 import { Song } from "@/types";
 import Image from "next/image";
 
@@ -8,21 +9,17 @@ interface MediaItemProps {
   data: Song;
   onClick?: (id: string) => void;
 }
-const MediaItem: React.FC<MediaItemProps> = ({
-  data,
-  onClick,
-}) => {
+const MediaItem: React.FC<MediaItemProps> = ({ data, onClick }) => {
   const imageUrl = useLoadImage(data);
-
+  const player = usePlayer();
   const handleClick = () => {
     if (onClick) {
       return onClick(data.id);
     }
-  
-    //Default turn on player
+
+    return player.setId(data.id);
   };
 
-        
   return (
     <div
       onClick={handleClick}
@@ -35,8 +32,9 @@ const MediaItem: React.FC<MediaItemProps> = ({
         w-full 
         p-2 
         rounded-md
-      ">
-         <div 
+      "
+    >
+      <div
         className="
           relative 
           rounded-md 
@@ -53,16 +51,11 @@ const MediaItem: React.FC<MediaItemProps> = ({
         />
       </div>
       <div className="flex flex-col gap-y-1 overflow-hidden">
-        <p className="text-white truncate">
-          {data.title}
-        </p>
-        <p className="text-neutral-400 text-sm truncate">
-          By {data.author}
-        </p>
+        <p className="text-white truncate">{data.title}</p>
+        <p className="text-neutral-400 text-sm truncate">By {data.author}</p>
       </div>
+    </div>
+  );
+};
 
-      </div>
-  )
-}
-
-export default MediaItem
+export default MediaItem;
